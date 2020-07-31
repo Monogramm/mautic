@@ -31,7 +31,7 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
     private $container;
     private $transport;
     private $application;
-    private $service;
+    private $installer;
 
     private $command;
 
