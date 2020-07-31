@@ -249,18 +249,18 @@ class InstallCommand extends ContainerAwareCommand
         /** @var \Mautic\InstallBundle\Install\InstallService $installer */
         $installer = $container->get('mautic.install.service');
 
-        $output->writeln([
-            'Mautic Install',
-            '==============',
-            '',
-        ]);
-
         // Check Mautic is not already installed
         if ($installer->checkIfInstalled()) {
             $output->writeln('Mautic already installed');
 
             return 0;
         }
+
+        $output->writeln([
+            'Mautic Install',
+            '==============',
+            '',
+        ]);
 
         // Build objects to pass to the install service from local.php or command line options
         $output->writeln('Parsing options and arguments...');
