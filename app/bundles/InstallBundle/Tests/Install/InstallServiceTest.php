@@ -135,15 +135,16 @@ class InstallServiceTest extends \PHPUnit\Framework\TestCase
     public function testCheckRequirements(): void
     {
         $step     = $this->createMock(StepInterface::class);
-        $messages = [];
+        $messages = ['dummy' => 'test'];
 
         $step->expects($this->once())
             ->method('checkRequirements')
             ->willReturn($messages);
 
-        $this->translator->method('trans')
-            ->with($messages)
-            ->willReturn($messages);
+        $this->translator->expects($this->once())
+            ->method('trans')
+            ->with('test', [], null, null)
+            ->willReturn('test');
 
         $this->assertEquals($messages, $this->installer->checkRequirements($step));
     }
@@ -151,17 +152,69 @@ class InstallServiceTest extends \PHPUnit\Framework\TestCase
     public function testCheckOptionalSettings(): void
     {
         $step     = $this->createMock(StepInterface::class);
-        $messages = [];
+        $messages = ['dummy' => 'test'];
 
         $step->expects($this->once())
             ->method('checkOptionalSettings')
             ->willReturn($messages);
 
-        $this->translator->method('trans')
-            ->with($messages)
-            ->willReturn($messages);
+        $this->translator->expects($this->once())
+            ->method('trans')
+            ->with('test', [], null, null)
+            ->willReturn('test');
 
         $this->assertEquals($messages, $this->installer->checkOptionalSettings($step));
+    }
+
+    public function testSaveConfigurationWhenNoCacheClear(): void
+    {
+        $params     = [];
+        $step       = $this->createMock(StepInterface::class);
+        $clearCache = false;
+
+        $messages = true;
+
+        $step->expects($this->once())
+            ->method('update')
+            ->with($step)
+            ->willReturn($params);
+
+        $this->configurator->expects($this->once())
+            ->method('write');
+
+        $this->configurator->expects($this->once())
+            ->method('mergeParameters')
+            ->with($params)
+            ->willReturn($messages);
+
+        $this->assertEquals($messages, $this->installer->saveConfiguration($params, $step, $clearCache));
+    }
+
+    public function testSaveConfigurationWhenCacheClear(): void
+    {
+        $params     = [];
+        $step       = $this->createMock(StepInterface::class);
+        $clearCache = true;
+
+        $messages = true;
+
+        $step->expects($this->once())
+            ->method('update')
+            ->with($step)
+            ->willReturn($params);
+
+        $this->configurator->expects($this->once())
+            ->method('mergeParameters')
+            ->with($params)
+            ->willReturn($messages);
+
+        $this->configurator->expects($this->once())
+            ->method('write');
+
+        $this->cacheHelper->expects($this->once())
+            ->method('refreshConfig');
+
+        $this->assertEquals($messages, $this->installer->saveConfiguration($params, $step, $clearCache));
     }
 
     public function testValidateDatabaseParamsWhenNoRequired(): void
