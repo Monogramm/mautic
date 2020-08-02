@@ -15,7 +15,6 @@ use Mautic\CoreBundle\Helper\CoreParametersHelper;
 use Mautic\InstallBundle\Command\InstallCommand;
 use Mautic\InstallBundle\Install\InstallService;
 use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -23,7 +22,6 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-//  bin/phpunit --bootstrap vendor/autoload.php --configuration app/phpunit.xml.dist --coverage-clover=coverage.xml app/bundles/InstallBundle/Tests/Command/InstallCommandTest.php
 class InstallCommandTest extends \PHPUnit\Framework\TestCase
 {
     private $coreParametersHelper;
